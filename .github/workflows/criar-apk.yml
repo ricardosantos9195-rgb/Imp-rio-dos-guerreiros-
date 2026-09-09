@@ -26,13 +26,13 @@ jobs:
       - name: Compilar APK
         run: gradle assembleDebug
       - name: Preparar APK para download direto
-        run: cp app/build/outputs/apk/debug/app-debug.apk Imperio-dos-Guerreiros-v0.11.apk
+        run: cp app/build/outputs/apk/debug/app-debug.apk Imperio-dos-Guerreiros-v0.12.apk
       - name: Publicar versão para Android
         env:
           GH_TOKEN: ${{ github.token }}
-        run: gh release create v0.11 Imperio-dos-Guerreiros-v0.11.apk --title "Império dos Guerreiros v0.11" --notes "Novo mapa territorial jogável com fronteiras de alianças e coordenadas."
+        run: gh release create v0.12 Imperio-dos-Guerreiros-v0.12.apk --title "Império dos Guerreiros v0.12" --notes "Mapa arrastável, território neutro e sistema de fé Athenas, Ares e Apolo."
       - name: Guardar APK
         uses: actions/upload-artifact@v4
         with:
-          name: Imperio-dos-Guerreiros-v0.11-APK
+          name: Imperio-dos-Guerreiros-v0.12-APK
           path: app/build/outputs/apk/debug/app-debug.apk
