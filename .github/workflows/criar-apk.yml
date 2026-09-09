@@ -26,13 +26,13 @@ jobs:
       - name: Compilar APK
         run: gradle assembleDebug
       - name: Preparar APK para download direto
-        run: cp app/build/outputs/apk/debug/app-debug.apk Imperio-dos-Guerreiros-v0.8.apk
+        run: cp app/build/outputs/apk/debug/app-debug.apk Imperio-dos-Guerreiros-v0.9.apk
       - name: Publicar versão para Android
         env:
           GH_TOKEN: ${{ github.token }}
-        run: gh release create v0.8 Imperio-dos-Guerreiros-v0.8.apk --title "Império dos Guerreiros v0.8" --notes "Versão horizontal com correção do cenário da cidade."
+        run: gh release create v0.9 Imperio-dos-Guerreiros-v0.9.apk --title "Império dos Guerreiros v0.9" --notes "Correção definitiva do carregamento da imagem da cidade no Android."
       - name: Guardar APK
         uses: actions/upload-artifact@v4
         with:
-          name: Imperio-dos-Guerreiros-v0.8-APK
+          name: Imperio-dos-Guerreiros-v0.9-APK
           path: app/build/outputs/apk/debug/app-debug.apk

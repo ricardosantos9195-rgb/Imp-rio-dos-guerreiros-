@@ -37,7 +37,7 @@
 <body>
 <section class="splash" id="splash"><div class="splash-box"><h1>IMPÉRIO DOS GUERREIROS</h1><p>CONQUISTA · ALIANÇA · GLÓRIA</p><button class="enter" id="enterGame">ENTRAR NO IMPÉRIO</button></div></section>
 <section class="auth-screen" id="authScreen"><div class="auth-card"><div class="crest" style="margin:auto">IG</div><h2>Guarda o teu Império</h2><p>Entra com uma conta para manter a tua cidade e progresso.</p><button class="login-btn google" data-login="Google">🔵 Continuar com Google</button><button class="login-btn facebook" data-login="Facebook">f &nbsp; Continuar com Facebook</button><button class="login-btn guest" data-login="Convidado">⚔️ Jogar como convidado</button><p class="auth-note">Protótipo: Google e Facebook ficam preparados visualmente; a ligação segura ao servidor será ativada na versão online.</p><div class="auth-status" id="authStatus"></div></div></section>
-<main class="app"><div style="position:fixed;right:5px;top:2px;z-index:120;background:#b62222;color:#fff;border:1px solid #ffd47a;border-radius:4px;padding:2px 6px;font-weight:900;font-size:11px">v0.8</div>
+<main class="app"><div style="position:fixed;right:5px;top:2px;z-index:120;background:#b62222;color:#fff;border:1px solid #ffd47a;border-radius:4px;padding:2px 6px;font-weight:900;font-size:11px">v0.9</div>
   <header class="top"><div class="crest">IG</div><div class="title"><h1>IMPÉRIO DOS GUERREIROS</h1><small>Reino 01 · Lord Ricardo</small></div><div class="resources"><div class="res"><b id="food">12 500</b><span>🌾 Alimentos</span></div><div class="res"><b id="wood">9 200</b><span>🪵 Madeira</span></div><div class="res"><b id="gold">4 800</b><span>🪙 Ouro</span></div><div class="res"><b id="wisdom">100</b><span>🔮 Sabedoria</span></div><div class="res"><b id="power">1 240</b><span>⚔️ Poder</span></div></div></header>
   <div class="layout">
     <nav class="panel nav" aria-label="Menu principal">
@@ -60,6 +60,7 @@
 <div class="modal" id="battle"><div class="dialog"><h2 id="battleTitle">Preparar ataque</h2><p>Escolhe a força da marcha. Uma vitória traz recursos e pontos para a aliança.</p><label>Quantidade de tropas</label><input id="troops" type="number" min="50" max="480" value="250"><div class="row"><button class="btn" id="cancel">Cancelar</button><button class="action primary" id="attack">ATACAR</button></div></div></div>
 <div class="toast" id="toast"></div>
 <script>
+  const cityArt=document.querySelector('.city-bg');cityArt.src=location.protocol==='file:'?'file:///android_asset/cidade-estrategia-v5.jpg':'cidade-estrategia-v5.jpg';cityArt.onerror=()=>{cityArt.style.display='none';document.querySelector('.city').style.background='linear-gradient(135deg,#385742,#16251c)'};
   const initial={food:12500,wood:9200,gold:4800,wisdom:100,power:1240,inf:240,cav:140,arc:100,siege:0,heroes:1,senateLv:1,marketLv:1,researchCenterLv:1,missionsLv:1,infBarracksLv:1,cavBarracksLv:1,arcBarracksLv:1,siegeBarracksLv:1,completedResearch:0,monstersKilled:0};
   const state=Object.assign({},initial,JSON.parse(localStorage.getItem('imperio-save')||'{}'));
   const fmt=n=>n.toLocaleString('pt-PT'); const toast=m=>{const t=document.querySelector('#toast');t.textContent=m;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2400)};
