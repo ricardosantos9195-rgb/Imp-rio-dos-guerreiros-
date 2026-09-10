@@ -114,7 +114,7 @@
         node.style.top = Math.max(2, Math.min(94, castle.y / 10)) + '%';
         node.dataset.node = (profile.display_name || 'Guerreiro') + ' · Castelo Nv.' + castle.level;
         node.dataset.kind = own ? 'ownCastle' : 'playerCastle';
-        node.innerHTML = '🏰<small>' + (own ? 'TEU CASTELO' : escapeHtml(profile.display_name || 'Guerreiro')) + '</small>';
+        node.innerHTML = '<span class="castle-art"><i class="tower left"></i><i class="keep"></i><i class="tower right"></i><i class="gate"></i></span><small>' + (own ? 'TEU CASTELO' : escapeHtml(profile.display_name || 'Guerreiro')) + '</small>';
         node.onclick = () => window.imperioToast(node.dataset.node + ' · Poder ' + Number(profile.power || 0).toLocaleString('pt-PT'));
         world.appendChild(node);
       });
