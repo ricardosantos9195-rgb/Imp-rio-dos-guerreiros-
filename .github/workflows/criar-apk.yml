@@ -26,13 +26,13 @@ jobs:
       - name: Compilar APK
         run: gradle assembleDebug
       - name: Preparar APK para download direto
-        run: cp app/build/outputs/apk/debug/app-debug.apk Imperio-dos-Guerreiros-v0.42.apk
+        run: cp app/build/outputs/apk/debug/app-debug.apk Imperio-dos-Guerreiros-v0.43.apk
       - name: Publicar versão para Android
         env:
           GH_TOKEN: ${{ github.token }}
-        run: gh release create v0.42 Imperio-dos-Guerreiros-v0.42.apk --title "Império dos Guerreiros v0.42 — Teste" --notes "Mapa 1.120 × 1.120 km, Trono X560/Y560 e teletransporte livre com território inimigo permitido apenas durante o KVK."
+        run: gh release create v0.43 Imperio-dos-Guerreiros-v0.43.apk --title "Império dos Guerreiros v0.43 — Teste" --notes "Mapa por quadrados de 10 km, Trono Supremo e campo de guerra central, teletransporte por seleção, pesquisa exclusiva de monstros e minas e botão para voltar ao Senado."
       - name: Guardar APK
         uses: actions/upload-artifact@v4
         with:
-          name: Imperio-dos-Guerreiros-v0.42-APK
+          name: Imperio-dos-Guerreiros-v0.43-APK
           path: app/build/outputs/apk/debug/app-debug.apk
