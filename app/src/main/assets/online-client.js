@@ -8,6 +8,7 @@
   const TOKEN_KEY = 'imperio-online-session';
   let session = null;
   let lastSaved = '';
+  let ownAllianceId = null;
 
   function message(text, error) {
     authStatus.textContent = text;
@@ -66,9 +67,10 @@
 
   async function loadPlayer(preferredName) {
     const userId = session.user.id;
-    const profileRows = await request('/rest/v1/profiles?id=eq.' + encodeURIComponent(userId) + '&select=display_name,faith,power');
+    const profileRows = await request('/rest/v1/profiles?id=eq.' + encodeURIComponent(userId) + '&select=display_name,faith,power,alliance_id');
     const stateRows = await request('/rest/v1/player_states?user_id=eq.' + encodeURIComponent(userId) + '&select=state');
     if (profileRows[0]) {
+      ownAllianceId = profileRows[0].alliance_id || null;
       localStorage.setItem('imperio-faith', profileRows[0].faith || 'athenas');
       const title = document.querySelector('.title small');
       if (title) title.textContent = 'Reino 01 · ' + (profileRows[0].display_name || preferredName || 'Guerreiro');
@@ -101,7 +103,7 @@
   async function loadCastles() {
     if (!session) return;
     try {
-      const castles = await request('/rest/v1/castles?select=id,user_id,x,y,level,faith,profiles(display_name,power)&realm_id=eq.1&limit=200');
+      const castles = await request('/rest/v1/castles?select=id,user_id,x,y,level,faith,profiles(display_name,power,alliance_id)&realm_id=eq.1&limit=200');
       const world = document.querySelector('.world-layer');
       if (!world) return;
       world.querySelectorAll('.player-castle').forEach(node => node.remove());
@@ -109,7 +111,8 @@
         const node = document.createElement('button');
         const own = castle.user_id === session.user.id;
         const profile = castle.profiles || {};
-        node.className = 'node player-castle' + (own ? ' mine' : '');
+        const ally = !own && ownAllianceId && profile.alliance_id === ownAllianceId;
+        node.className = 'node player-castle ' + (own ? 'mine' : ally ? 'ally' : 'enemy');
         node.style.left = Math.max(2, Math.min(96, castle.x / 10)) + '%';
         node.style.top = Math.max(2, Math.min(94, castle.y / 10)) + '%';
         node.dataset.node = (profile.display_name || 'Guerreiro') + ' · Castelo Nv.' + castle.level;
@@ -119,6 +122,19 @@
         world.appendChild(node);
       });
     } catch (error) { setConnection(false, 'Mapa indisponível'); }
+  }
+
+  async function moveCastle(mapX, mapY) {
+    if (!session) return false;
+    const x = Math.max(0, Math.min(999, Math.round((Number(mapX) / 1120) * 999)));
+    const y = Math.max(0, Math.min(999, Math.round((Number(mapY) / 1120) * 999)));
+    await request('/rest/v1/castles?user_id=eq.' + encodeURIComponent(session.user.id), {
+      method:'PATCH',
+      headers:{Prefer:'return=minimal'},
+      body:JSON.stringify({x, y, protected_until:new Date(Date.now()+10*60*1000).toISOString()})
+    });
+    await loadCastles();
+    return true;
   }
 
   function escapeHtml(value) {
@@ -143,5 +159,6 @@
   document.querySelector('#onlineSignup').onclick = signUp;
   setInterval(saveProgress, 10000);
   setInterval(loadCastles, 30000);
+  window.imperioMoveCastle = moveCastle;
   restore();
 })();
