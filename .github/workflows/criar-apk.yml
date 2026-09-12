@@ -26,14 +26,14 @@ jobs:
       - name: Compilar APK
         run: gradle assembleDebug
       - name: Preparar APK para download direto
-        run: cp app/build/outputs/apk/debug/app-debug.apk Imperio-dos-Guerreiros-v0.57.apk
+        run: cp app/build/outputs/apk/debug/app-debug.apk Imperio-dos-Guerreiros-v0.58.apk
       - name: Publicar versão para Android
         env:
           GH_TOKEN: ${{ github.token }}
         run: >-
-          gh release create v0.57 Imperio-dos-Guerreiros-v0.57.apk --title "Império dos Guerreiros v0.57 — Instalação Limpa" --notes "Substitui integralmente o ficheiro principal, corrige o botão Entrar no Império e inclui o mapa organizado sem conteúdos antigos da v0.55."
+          gh release create v0.58 Imperio-dos-Guerreiros-v0.58.apk --title "Império dos Guerreiros v0.58 — Fortaleza do Trono Supremo" --notes "Adiciona a colossal Fortaleza do Trono Supremo em X560/Y560, com muralhas, pontes, montanha, nuvens e grande campo de guerra KVK; preserva as correções de entrada da v0.57."
       - name: Guardar APK
         uses: actions/upload-artifact@v4
         with:
-          name: Imperio-dos-Guerreiros-v0.57-APK
+          name: Imperio-dos-Guerreiros-v0.58-APK
           path: app/build/outputs/apk/debug/app-debug.apk
