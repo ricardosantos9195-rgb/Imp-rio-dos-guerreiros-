@@ -26,14 +26,14 @@ jobs:
       - name: Compilar APK
         run: gradle assembleDebug
       - name: Preparar APK para download direto
-        run: cp app/build/outputs/apk/debug/app-debug.apk Imperio-dos-Guerreiros-v0.54.apk
+        run: cp app/build/outputs/apk/debug/app-debug.apk Imperio-dos-Guerreiros-v0.55.apk
       - name: Publicar versão para Android
         env:
           GH_TOKEN: ${{ github.token }}
         run: >-
-          gh release create v0.54 Imperio-dos-Guerreiros-v0.54.apk --title "Império dos Guerreiros v0.54 — Compatibilidade Android" --notes "Corrige o bloqueio do motor do mapa em WebViews Android sem ResizeObserver. O Senado, monstros, minas, controlos, coordenadas, zoom e teletransporte passam a carregar também no modo convidado."
+          gh release create v0.55 Imperio-dos-Guerreiros-v0.55.apk --title "Império dos Guerreiros v0.55 — Novo Motor do Mapa" --notes "Reconstrói o mapa num motor DOM compatível com Android: Senado inicial, 28 alvos próximos, terreno navegável, zoom, pesquisa, coordenadas e menus no modo convidado."
       - name: Guardar APK
         uses: actions/upload-artifact@v4
         with:
-          name: Imperio-dos-Guerreiros-v0.54-APK
+          name: Imperio-dos-Guerreiros-v0.55-APK
           path: app/build/outputs/apk/debug/app-debug.apk
