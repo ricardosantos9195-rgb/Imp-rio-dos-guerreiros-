@@ -87,7 +87,8 @@
 <div class="modal" id="buildingDetail"><div class="dialog building-dialog"><img id="buildingImage" alt="Edifício"><h2 id="buildingTitle"></h2><span class="building-level" id="buildingLevel"></span><p id="buildingDescription"></p><div class="row"><button class="btn" id="buildingClose">Fechar</button><button class="action primary" id="buildingEnter">ENTRAR</button></div></div></div>
 <div class="toast" id="toast"></div>
 <script>
-  const cityArt=document.querySelector('.city-bg');cityArt.src=location.protocol==='file:'?'file:///android_asset/cidade-realista-v28.png':'cidade-realista-v28.png';
+v0.55 TESTE INTERNO
+  v0.56 TESTE INTERNOconst cityArt=document.querySelector('.city-bg');cityArt.src=location.protocol==='file:'?'file:///android_asset/cidade-realista-v28.png':'cidade-realista-v28.png';
   const initial={food:12500,wood:9200,gold:4800,wisdom:100,power:1240,diamonds:0,troopBoost:0,buildBoost:0,researchBoost:0,territories:0,inf:240,cav:140,arc:100,siege:0,heroes:1,mainHero:'Leônidas',senateLv:1,marketLv:1,researchCenterLv:1,missionsLv:1,infBarracksLv:1,cavBarracksLv:1,arcBarracksLv:1,siegeBarracksLv:1,hospitalLv:1,templeLv:1,altarLv:1,granaryLv:1,sanctuaryLv:1,watchtowerLv:1,diamondBankLv:1,libraryLv:1,completedResearch:0,monstersKilled:0};
   const state=Object.assign({},initial,JSON.parse(localStorage.getItem('imperio-save')||'{}'));window.imperioState=state;
   const fmt=n=>n.toLocaleString('pt-PT'); const toast=m=>{const t=document.querySelector('#toast');t.textContent=m;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2400)};
