@@ -7,19 +7,6 @@ android {
         applicationId 'io.imperiodosguerreiros.game'
         minSdk 24
         targetSdk 35
-        versionCode 55
-        versionName '0.55.0'
-    }
-}
-plugins { id 'com.android.application' }
-
-android {
-    namespace 'io.imperiodosguerreiros.game'
-    compileSdk 35
-    defaultConfig {
-        applicationId 'io.imperiodosguerreiros.game'
-        minSdk 24
-        targetSdk 35
         versionCode 56
         versionName '0.56.0'
     }
