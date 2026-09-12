@@ -82,7 +82,7 @@
       window.imperioRender();
     }
     setConnection(true, (profileRows[0] && profileRows[0].display_name) || preferredName || 'Guerreiro');
-    await Promise.all([loadCastles(), loadWorldState()]);
+    await Promise.all([loadCastles(), loadWorldState(), loadWorldV60()]);
   }
 
   function mapEntityNode(entity) {
@@ -250,6 +250,21 @@
     }
   }
 
+  async function loadWorldV60() {
+    if (!session) return;
+    try {
+      const [passes, structures, buffs, rallies] = await Promise.all([
+        request('/rest/v1/border_passes?realm_id=eq.1&select=id,name,x,y,target_zone,max_health,health,owner_alliance_id,shield_until'),
+        request('/rest/v1/alliance_structures?realm_id=eq.1&active=eq.true&select=id,alliance_id,structure_type,parent_structure_id,x,y,level,health'),
+        ownAllianceId ? request('/rest/v1/alliance_buffs?alliance_id=eq.' + encodeURIComponent(ownAllianceId) + '&select=march_speed,defense,debuff_resistance') : Promise.resolve([]),
+        ownAllianceId ? request('/rest/v1/alliance_rallies?alliance_id=eq.' + encodeURIComponent(ownAllianceId) + '&status=in.(forming,marching,fighting)&select=id,target_kind,target_id,status,total_power,capacity,launches_at,arrives_at&order=created_at.desc&limit=30') : Promise.resolve([])
+      ]);
+      window.dispatchEvent(new CustomEvent('imperio:v60-world', {detail:{passes,structures,buffs:buffs[0]||null,rallies,allianceId:ownAllianceId}}));
+    } catch (_) {
+      // A migração world_war_v60.sql pode ainda não ter sido executada.
+    }
+  }
+
   async function saveProgress() {
     if (!session || serverActionPending) return;
     const serialized = JSON.stringify(window.imperioState);
@@ -336,10 +351,13 @@
   setInterval(saveProgress, 10000);
   setInterval(loadCastles, 30000);
   setInterval(loadWorldState, 30000);
+  setInterval(loadWorldV60, 30000);
   setInterval(resolveMarches, 5000);
   setInterval(updateMarchPositions, 1000);
   window.imperioMoveCastle = moveCastle;
   window.imperioRandomTeleportCastle = randomTeleportCastle;
   window.imperioOpenOnlineReports = openOnlineReports;
+  window.imperioOnlineRequest = request;
+  window.imperioRefreshWorldV60 = loadWorldV60;
   restore();
 })();
