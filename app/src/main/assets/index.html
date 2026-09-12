@@ -61,7 +61,7 @@
 <section class="splash" id="splash"><div class="splash-box"><h1>IMPÉRIO DOS GUERREIROS</h1><p>CONQUISTA · ALIANÇA · GLÓRIA</p><button class="enter" id="enterGame">ENTRAR NO IMPÉRIO</button></div></section>
 <section class="auth-screen" id="authScreen"><div class="auth-card"><div class="crest" style="margin:auto">IG</div><h2>Entra no teu Império</h2><p>Cria uma conta para guardar a cidade no servidor.</p><input id="playerName" maxlength="24" placeholder="Nome do teu guerreiro"><input id="loginEmail" type="email" autocomplete="email" placeholder="E-mail"><input id="loginPassword" type="password" autocomplete="current-password" minlength="6" placeholder="Palavra-passe (mínimo 6 caracteres)"><button class="login-btn" id="onlineLogin">Entrar</button><button class="login-btn create" id="onlineSignup">Criar conta</button><button class="login-btn guest" data-login="Convidado">⚔️ Experimentar como convidado</button><p class="auth-note">A conta permanente guarda o castelo e o progresso online. O modo convidado fica apenas neste dispositivo.</p><div class="auth-status" id="authStatus"></div></div></section>
 <section class="faith-screen" id="faithScreen"><div class="faith-card"><h2>Escolhe a tua Fé</h2><div class="faith-options"><button class="faith-choice athenas" data-faith="athenas"><strong>🦉 ATHENAS</strong><small>Azul · +15% velocidade de pesquisa<br>+10% defesa das tropas</small></button><button class="faith-choice ares" data-faith="ares"><strong>⚔️ ARES</strong><small>Vermelho · +15% ataque<br>+10% velocidade de treino</small></button><button class="faith-choice apolo" data-faith="apolo"><strong>☀️ APOLO</strong><small>Amarelo · +15% recursos<br>+10% velocidade de construção</small></button></div></div></section>
-<main class="app"><div class="online-status" id="onlineStatus">● Modo local</div><div style="position:fixed;right:5px;top:2px;z-index:120;background:#b62222;color:#fff;border:1px solid #ffd47a;border-radius:4px;padding:2px 6px;font-weight:900;font-size:11px">v0.60 TESTE INTERNO</div>
+<main class="app"><div class="online-status" id="onlineStatus">● Modo local</div><div style="position:fixed;right:5px;top:2px;z-index:120;background:#b62222;color:#fff;border:1px solid #ffd47a;border-radius:4px;padding:2px 6px;font-weight:900;font-size:11px">v0.61 TESTE INTERNO</div>
   <header class="top"><div class="crest">IG</div><div class="title"><h1>IMPÉRIO DOS GUERREIROS</h1><small>Reino 01 · Lord Ricardo</small></div><div class="resources"><div class="res"><b id="food">12 500</b><span>🌾 Alimentos</span></div><div class="res"><b id="wood">9 200</b><span>🪵 Madeira</span></div><div class="res"><b id="gold">4 800</b><span>🪙 Ouro</span></div><div class="res"><b id="wisdom">100</b><span>🔮 Sabedoria</span></div><div class="res"><b id="power">1 240</b><span>⚔️ Poder</span></div></div></header>
   <div class="layout">
     <nav class="panel nav" aria-label="Menu principal">
@@ -141,10 +141,10 @@
   const clampPan=()=>{const s=worldSize();panX=Math.max(mapEl.clientWidth-s.w,Math.min(0,panX));panY=Math.max(mapEl.clientHeight-s.h,Math.min(0,panY))};
   const centerOnPercent=(x,y)=>{const s=worldSize();panX=mapEl.clientWidth/2-s.w*x/100;panY=mapEl.clientHeight/2-s.h*y/100;clampPan();updateMap()};
   const initPan=()=>{if(panX!==null)return;centerOnPercent(50,50)};
-  const updateMap=()=>{clampPan();world.style.transform='translate('+panX+'px,'+panY+'px)';const s=worldSize(),x=Math.max(0,Math.min(100,(mapEl.clientWidth/2-panX)/s.w*100)),y=Math.max(0,Math.min(100,(mapEl.clientHeight/2-panY)/s.h*100));window.dispatchEvent(new CustomEvent('imperio:map-move',{detail:{x,y,kmX:Math.round(x*11.2),kmY:Math.round(y*11.2)}}))};
+  const updateMap=()=>{if(document.body.classList.contains('map-v55'))return;clampPan();world.style.transform='translate('+panX+'px,'+panY+'px)';const s=worldSize(),x=Math.max(0,Math.min(100,(mapEl.clientWidth/2-panX)/s.w*100)),y=Math.max(0,Math.min(100,(mapEl.clientHeight/2-panY)/s.h*100));window.dispatchEvent(new CustomEvent('imperio:map-move',{detail:{x,y,kmX:Math.round(x*11.2),kmY:Math.round(y*11.2)}}))};
   window.imperioMapCamera={centerOnPercent,getCenter:()=>{initPan();const s=worldSize();return{x:(mapEl.clientWidth/2-panX)/s.w*100,y:(mapEl.clientHeight/2-panY)/s.h*100}},refresh:updateMap};
-  mapEl.addEventListener('pointerdown',e=>{if(e.target.closest('.node,.map-ui'))return;initPan();dragging=true;mapEl.classList.add('dragging');mapEl.setPointerCapture(e.pointerId);startX=e.clientX;startY=e.clientY;baseX=panX;baseY=panY});
-  mapEl.addEventListener('pointermove',e=>{if(!dragging)return;panX=baseX+e.clientX-startX;panY=baseY+e.clientY-startY;updateMap()});
+  mapEl.addEventListener('pointerdown',e=>{if(document.body.classList.contains('map-v55')||e.target.closest('.node,.map-ui'))return;initPan();dragging=true;mapEl.classList.add('dragging');mapEl.setPointerCapture(e.pointerId);startX=e.clientX;startY=e.clientY;baseX=panX;baseY=panY});
+  mapEl.addEventListener('pointermove',e=>{if(document.body.classList.contains('map-v55')||!dragging)return;panX=baseX+e.clientX-startX;panY=baseY+e.clientY-startY;updateMap()});
   mapEl.addEventListener('pointerup',()=>{dragging=false;mapEl.classList.remove('dragging')});mapEl.addEventListener('pointercancel',()=>{dragging=false;mapEl.classList.remove('dragging')});
   document.querySelector('#donate').onclick=()=>{if(state.wood<500)return toast('Madeira insuficiente');state.wood-=500;state.power+=35;render();toast('Doação concluída: +35 poder de aliança')};window.imperioRender=render;window.imperioShow=show;window.imperioToast=toast;render();
   if('serviceWorker' in navigator) addEventListener('load',()=>navigator.serviceWorker.register('service-worker.js'));
@@ -172,6 +172,7 @@
     <script src="troop-tiers-v38.js"></script>
     <script src="troop-visuals-v39.js"></script>
     <script src="quality-v41.js"></script>
-    <script src="map-engine-v55.js"></script>\n    <script src="world-war-v60.js"></script>
+    <script src="map-engine-v55.js"></script>
+    <script src="world-war-v60.js"></script>
 </body>
 </html>
