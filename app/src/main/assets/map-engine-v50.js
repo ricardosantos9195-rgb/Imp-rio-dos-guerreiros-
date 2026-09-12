@@ -56,7 +56,9 @@
   function drawEntities(){const w=canvas.clientWidth,h=canvas.clientHeight;activeEntities().forEach(n=>{const p=screen(+n.dataset.mapX,+n.dataset.mapY),visible=p.x>-100&&p.x<w+100&&p.y>-100&&p.y<h+100;n.hidden=!visible;if(visible){n.style.left=p.x+'px';n.style.top=p.y+'px'}})}
   function render(){if(!ctx)return;drawTerrain();drawGrid();drawEntities();state.mapCameraX=Math.round(camera.x);state.mapCameraY=Math.round(camera.y);window.dispatchEvent(new CustomEvent('imperio:v50-map-move',{detail:{x:Math.round(camera.x),y:Math.round(camera.y),scale:camera.scale}}))}
   window.imperioMapEngine={register,render,center:(x,y)=>{camera.x=x;camera.y=y;clamp();render()},getCenter:()=>({...camera}),updateServerState:value=>{serverWorld=value||serverWorld;render()}};
-  new ResizeObserver(resize).observe(map);resize();
+  if('ResizeObserver' in window)new ResizeObserver(resize).observe(map);
+  window.addEventListener('resize',resize);
+  resize();
 
   const occupied=(x,y)=>activeEntities().find(n=>n.style.display!=='none'&&Math.floor(+n.dataset.mapX)===x&&Math.floor(+n.dataset.mapY)===y);
   const enemyTerritory=(x,y)=>serverWorld.territories.some(t=>!t.mine&&x>=t.min_x&&x<=t.max_x&&y>=t.min_y&&y<=t.max_y);
